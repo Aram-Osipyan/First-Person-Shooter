@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour
     [SerializeField] float range = 30f;
     [SerializeField] float damage = 30f;
     [SerializeField] ParticleSystem muzzleFlash;
+    [SerializeField] GameObject explosion;
     void Start()
     {
         
@@ -42,7 +43,7 @@ public class Weapon : MonoBehaviour
         if (Physics.Raycast(FPCamera.transform.position, FPCamera.transform.forward, out hit, range))
         {
             Debug.Log("I hitted " + hit.transform.name);
-
+            CreateExposion(hit);
             EnemyHealth health = hit.transform.GetComponent<EnemyHealth>();
             health?.TakeDamage(damage);
         }
@@ -50,5 +51,10 @@ public class Weapon : MonoBehaviour
         {
             return;
         }
+    }
+
+    private void CreateExposion(RaycastHit hit)
+    {
+        Destroy(Instantiate(explosion, hit.point,Quaternion.LookRotation(hit.normal)),1);
     }
 }
