@@ -9,9 +9,11 @@ public class EnemyAI : MonoBehaviour
     NavMeshAgent navMeshAgent;
     [SerializeField] float chaseRange = 5f;
     bool isProvoked = false;
+    Animator enemies;
     // Start is called before the first frame update
     void Start()
     {
+        enemies = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.SetDestination(target.position);
     }
@@ -20,7 +22,7 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         var len = Vector3.Distance(gameObject.transform.position , target.position);
-
+        //navMeshAgent.SetDestination(target.position);
         if (isProvoked)
         {
             EngageTarget(len);
@@ -47,11 +49,14 @@ public class EnemyAI : MonoBehaviour
 
     private void AttackTarget()
     {
-        Debug.Log(name + " has seeked and is destroying "+target.name);
+       
+        enemies.SetTrigger("attack");
     }
 
     private void ChaseTarget()
     {
+        enemies.SetTrigger("move");
+        
         navMeshAgent.SetDestination(target.position);
     }
 
