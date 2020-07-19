@@ -11,19 +11,25 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] float turnSpeed;
     bool isProvoked = false;
     Animator enemies;
+    EnemyHealth enemyHealth;
     // Start is called before the first frame update
     void Start()
     {
         enemies = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         enemies.SetTrigger("idle");
+        enemyHealth = GetComponent<EnemyHealth>();
         // navMeshAgent.SetDestination(target.position);
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (enemyHealth.IsDead)
+        {
+            enabled = false;
+            navMeshAgent.enabled = false;
+        }
         var len = Vector3.Distance(gameObject.transform.position , target.position);
         //navMeshAgent.SetDestination(target.position);
         if (isProvoked)
@@ -37,7 +43,7 @@ public class EnemyAI : MonoBehaviour
         else
         {
             isProvoked = false;
-            Debug.Log("IDLE");
+            
            
         }
             
@@ -65,6 +71,7 @@ public class EnemyAI : MonoBehaviour
 
     private void ChaseTarget()
     {
+        enemies.SetTrigger("idle");
         enemies.SetTrigger("move");
         
         navMeshAgent.SetDestination(target.position);
